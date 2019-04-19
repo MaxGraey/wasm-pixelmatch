@@ -31,6 +31,7 @@ pub extern fn pixelmatch(img1: *mut u8, img2: *mut u8, width: u32, height: u32, 
     diff_count
 }
 
+#[inline]
 fn draw_pixel(output: &mut [u8], pos: u32, r: u8, g: u8, b: u8, a: u8) {
     output[pos as usize + 0] = r;
     output[pos as usize + 1] = g;
@@ -38,6 +39,7 @@ fn draw_pixel(output: &mut [u8], pos: u32, r: u8, g: u8, b: u8, a: u8) {
     output[pos as usize + 3] = a;
 }
 
+#[inline]
 fn gray_pixel(img: &[u8], i: u32, alpha: f32) -> u8 {
     let r = img[i as usize + 0];
     let g = img[i as usize + 1];
@@ -62,7 +64,7 @@ fn color_delta(img1: &[u8], img2: &[u8], pos1: u32, pos2: u32, only_brightness: 
 
     if a1 < 255
     {
-        let a1 = (a1 as f32) / 255.0;
+        let a1 = (a1 as f32) * 1.0 / 255.0;
         r1 = blend(r1, a1);
         g1 = blend(g1, a1);
         b1 = blend(b1, a1);
@@ -70,7 +72,7 @@ fn color_delta(img1: &[u8], img2: &[u8], pos1: u32, pos2: u32, only_brightness: 
 
     if a2 < 255
     {
-        let a2 = (a2 as f32) / 255.0;
+        let a2 = (a2 as f32) * 1.0 / 255.0;
         r2 = blend(r2, a2);
         g2 = blend(g2, a2);
         b2 = blend(b2, a2);
@@ -88,16 +90,22 @@ fn color_delta(img1: &[u8], img2: &[u8], pos1: u32, pos2: u32, only_brightness: 
     0.5053 * y * y + 0.299 * i * i + 0.1957 * q * q
 }
 
+#[inline]
 fn blend(c: u8, a: f32) -> u8 {
     (255.0 + ((c as i32 - 255) as f32) * a) as u8
 }
 
+#[inline]
 fn rgb2y(r: u8, g: u8, b: u8) -> f32 {
     r as f32 * 0.29889531 + g as f32 * 0.58662247 + b as f32 * 0.11448223
 }
+
+#[inline]
 fn rgb2i(r: u8, g: u8, b: u8) -> f32 {
     r as f32 * 0.59597799 - g as f32 * 0.27417610 - b as f32 * 0.32180189
 }
+
+#[inline]
 fn rgb2q(r: u8, g: u8, b: u8) -> f32 {
     r as f32 * 0.21147017 - g as f32 * 0.52261711 + b as f32 * 0.31114694
 }

@@ -36,7 +36,7 @@ async function fetchExposedFunction(wasmFile) {
     "./rust/pkg/pixelmatch_optimized.wasm"
   );
   const as = await fetchExposedFunction(
-    "./assemblyscript/build/optimized_opt.wasm"
+    "./assemblyscript/build/optimized.wasm"
   );
   const asInline = await fetchExposedFunction(
     "./assemblyscript/build/optimized_inline_opt.wasm"
@@ -53,7 +53,7 @@ async function fetchExposedFunction(wasmFile) {
     })
     .add("cpp_opt", {
       fn: () => cpp_opt(0, offset1, 800, 578, offset2)
-    })    
+    })
     .add("rust", {
       fn: () => rust(0, offset1, 800, 578, offset2)
     })
